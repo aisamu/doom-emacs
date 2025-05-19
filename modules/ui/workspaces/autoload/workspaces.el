@@ -566,23 +566,6 @@ This be hooked to `projectile-after-switch-project-hook'."
                    (+workspace-buffer-list)))
           (let* ((ws-param '+workspace-project)
                  (ws (+workspace-get pname t))
-                 (ws (if (and ws
-                              (ignore-errors
-                                (file-equal-p (persp-parameter ws-param ws)
-                                              proot)))
-                         ws
-                       ;; Uniquify the project's name, so we don't clobber a
-                       ;; pre-existing workspace with the same name.
-                       (let* ((parts (nreverse (split-string proot "/" t)))
-                              (pre  (cdr parts))
-                              (post (list (car parts))))
-                         (while (and pre
-                                     (setq ws (+workspace-get (setq pname (string-join post "/")) t))
-                                     (not (ignore-errors
-                                            (file-equal-p (persp-parameter ws-param ws)
-                                                          proot))))
-                           (push (pop pre) post))
-                         (unless pre ws))))
                  (ws (or ws
                          (+workspace-get pname t)
                          (+workspace-new pname))))
